@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+opencv-python
+pillow
+numpy
+imutils
+dlib
+pytesseract
+python-multipart
+azure-storage-blob
+redis
+imagehash
+rapidocr_onnxruntime
+requests
+loguru
