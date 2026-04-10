@@ -10,7 +10,7 @@ from datetime import datetime
 router = APIRouter()
 
 @router.post("/store")
-async def store(userId: str, file: UploadFile = File(None), url: str = Form(None)):
+async def store(file: UploadFile = File(None), url: str = Form(None), userId: str = Form(...)):
     start_time = datetime.now()
     img = load_image_from_input(file, url)
 
@@ -42,7 +42,7 @@ async def store(userId: str, file: UploadFile = File(None), url: str = Form(None
 
 
 @router.post("/search")
-async def search(userId: str, file: UploadFile = File(None), url: str = Form(None)):
+async def search(file: UploadFile = File(None), url: str = Form(None), userId: str = Form(...)):
     start_time = datetime.now()
     img = load_image_from_input(file, url)
 
@@ -71,7 +71,7 @@ async def search(userId: str, file: UploadFile = File(None), url: str = Form(Non
 
 @router.post("/test")
 async def test(
-    userId: str,
+    userId: str = Form(...),
     input_file: UploadFile = File(None),
     test_file: UploadFile = File(None),
     input_url: str = Form(None),

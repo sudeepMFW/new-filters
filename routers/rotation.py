@@ -10,7 +10,7 @@ from datetime import datetime
 router = APIRouter()
 
 @router.post("/")
-async def rotate(userId: str, file: UploadFile = File(None), url: str = Form(None)):
+async def rotate(file: UploadFile = File(None), url: str = Form(None), userId: str = Form(...)):
     start_time = datetime.now()
     img = load_image_from_input(file, url)
 

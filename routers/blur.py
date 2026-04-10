@@ -11,9 +11,9 @@ router = APIRouter()
 
 @router.post("/")
 async def blur(
-    userId: str,
     file: UploadFile = File(None),
-    url: str = Form(None)
+    url: str = Form(None),
+    userId: str = Form(...)
 ):
     start_time = datetime.now()
     img = load_image_from_input(file, url)

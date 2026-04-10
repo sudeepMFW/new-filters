@@ -11,10 +11,10 @@ router = APIRouter()
 
 @router.post("/")
 async def text(
-    userId: str,
     file: UploadFile = File(None), 
     url: str = Form(None), 
-    mode: str = Form("blur")
+    mode: str = Form("blur"),
+    userId: str = Form(...)
 ):
     start_time = datetime.now()
     img = load_image_from_input(file, url)
