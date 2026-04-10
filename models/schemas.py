@@ -22,13 +22,6 @@ class EventLogEntry(BaseModel):
     processingEndTime: str
     report: Dict[str, Any]
 
-class ProcessStatus(BaseModel):
-    totalProcessingFeatures: int
-    completedProcesses: int
-    inProcess: int
-    complete: bool
-    featureStatus: Dict[str, bool]
-
 class MediaInfo(BaseModel):
     inputMediaURL: str
     type: str = "IMAGE"
@@ -42,7 +35,6 @@ class ProductionResponse(BaseModel):
     eventStartTime: str
     eventEndTime: str
     eventLog: Dict[str, EventLogEntry]
-    processStatus: ProcessStatus
     media: MediaInfo
     timedOut: bool = False
     saved_at: str = Field(default_factory=lambda: datetime.now().isoformat())

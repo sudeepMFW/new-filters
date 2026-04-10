@@ -26,14 +26,6 @@ async def create_production_response(
         )
     }
     
-    process_status = ProcessStatus(
-        totalProcessingFeatures=1,
-        completedProcesses=1,
-        inProcess=0,
-        complete=True,
-        featureStatus={feature_name: True}
-    )
-    
     media_info = MediaInfo(
         inputMediaURL=input_url,
         type="IMAGE"
@@ -48,7 +40,6 @@ async def create_production_response(
         eventStartTime=start_time.strftime("%Y-%m-%d %H:%M:%S"),
         eventEndTime=end_time.strftime("%Y-%m-%d %H:%M:%S"),
         eventLog=event_log,
-        processStatus=process_status,
         media=media_info,
         timedOut=False,
         saved_at=end_time.isoformat()
