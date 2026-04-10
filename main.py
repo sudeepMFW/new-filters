@@ -12,10 +12,10 @@ app.add_middleware(
     allow_headers=["*"],            
 )
 
-app.include_router(rotation.router, prefix="/rotation", tags=["Rotation"])
-app.include_router(duplicate.router, prefix="/duplicate", tags=["Duplicate"])
-app.include_router(text_removal.router, prefix="/text", tags=["Text Removal"])
-app.include_router(blur.router,prefix="/face-blur",tags=["Face Blur"])
+app.include_router(rotation.router, prefix="/{userId}/rotation", tags=["Rotation"])
+app.include_router(duplicate.router, prefix="/{userId}/duplicate", tags=["Duplicate"])
+app.include_router(text_removal.router, prefix="/{userId}/text", tags=["Text Removal"])
+app.include_router(blur.router,prefix="/{userId}/face-blur",tags=["Face Blur"])
 
 @app.get("/")
 def root():
