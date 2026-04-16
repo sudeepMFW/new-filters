@@ -1,4 +1,4 @@
-from models.schemas import ProductionResponse, EventLogEntry, ProcessStatus, MediaInfo
+from models.schemas import ProductionResponse, EventLogEntry, MediaInfo
 from services.mongodb import mongo_handler
 from datetime import datetime
 import uuid

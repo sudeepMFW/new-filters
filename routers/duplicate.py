@@ -6,6 +6,7 @@ from services.response_service import create_production_response
 from PIL import Image
 import cv2
 from datetime import datetime
+from typing import List, Optional
 
 router = APIRouter()
 
@@ -72,27 +73,50 @@ async def search(file: UploadFile = File(None), url: str = Form(None), userId: s
 @router.post("/test")
 async def test(
     userId: str = Form(...),
-    input_file: UploadFile = File(None),
-    test_file: UploadFile = File(None),
-    input_url: str = Form(None),
-    test_url: str = Form(None)
+    input_file: Optional[UploadFile] = File(None),
+    test_files: Optional[List[UploadFile]] = File(None),
+    input_url: Optional[str] = Form(None),
+    test_urls: Optional[List[str]] = Form(None)
 ):
     start_time = datetime.now()
+    
+    # 1. Load the single input image
     img1 = load_image_from_input(input_file, input_url)
-    img2 = load_image_from_input(test_file, test_url)
+    if img1 is None:
+        return {"error": "Input image must be provided (file or url)"}
 
-    if img1 is None or img2 is None:
-        return {
-            "error": "Both images must be provided (file or url)"
-        }
+    # 2. Collect and load all test images
+    test_images = []
+    
+    # Process test files
+    if test_files:
+        for t_file in test_files:
+            img = load_image_from_input(file=t_file)
+            if img is not None:
+                test_images.append({"image": img, "source": t_file.filename})
 
-    duplicate_result = compare_two_images(img1, img2)
+    # Process test urls
+    if test_urls:
+        for t_url in test_urls:
+            img = load_image_from_input(url=t_url)
+            if img is not None:
+                test_images.append({"image": img, "source": t_url})
+
+    if not test_images:
+        return {"error": "At least one test image must be provided (file or url)"}
+
+    # 3. Compare input image against each test image
+    comparison_results = []
+    for test_item in test_images:
+        res = compare_two_images(img1, test_item["image"])
+        res["source"] = test_item["source"]
+        comparison_results.append(res)
     
     report_data = {
         "documentReport": {
             "report": {
-                "Message": duplicate_result.get("message", ""),
-                "Result": str(duplicate_result)
+                "Message": f"Compared against {len(comparison_results)} images",
+                "Results": comparison_results
             }
         }
     }
@@ -100,7 +124,7 @@ async def test(
     return await create_production_response(
         user_id=userId,
         feature_name="DuplicateTest",
-        input_url=input_url if input_url else "Multiple Uploads",
+        input_url=input_url if input_url else "Uploaded File",
         report_data=report_data,
         start_time=start_time,
         request_type="URL" if input_url else "FILE"

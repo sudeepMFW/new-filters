@@ -13,3 +13,5 @@ imagehash
 rapidocr_onnxruntime
 requests
 loguru
+easyocr
+simple-lama-inpainting
